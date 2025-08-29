@@ -9,7 +9,7 @@ for (let i = 0; i < tapHeartIcons.length; i++) {
   });
 }
 
-// Existing call button functionality code
+// call button functionality code
 const callButtons = document.getElementsByClassName("btn-success");
 const countCoin = document.getElementById("count-coin");
 const historyList = document.getElementById("history-list");
@@ -38,6 +38,15 @@ for (let i = 0; i < callButtons.length; i++) {
 
     alert("Calling " + serviceName + " at " + serviceNumber);
 
+    // current time function
+    const now = new Date();
+    const hours = now.getHours();
+    const minutes = now.getMinutes();
+    const seconds = now.getSeconds();
+
+    // formatting the time
+    const formattedTime = `${hours}:${minutes}:${seconds}`;
+
     const historyItem = document.createElement("div");
     historyItem.classList.add(
       "flex",
@@ -50,19 +59,43 @@ for (let i = 0; i < callButtons.length; i++) {
     );
     historyItem.innerHTML = `
       <div>
-        <p class="text-xs font-semibold">${serviceName}</p>
-        <p class="text-xs font-normal">${serviceNumber}</p>
+        <p class="text-sm font-semibold">${serviceName}</p>
+        <p class="text-sm font-normal">${serviceNumber}</p>
       </div>
-      <p class="text-xs">Date</p>
+      <p class="text-sm">${formattedTime}</p>
     `;
     historyList.appendChild(historyItem);
   });
 }
 
-// Clear History button function
+// clear History button function
 const clearButton = document.getElementById("clear-history-btn");
 
 clearButton.addEventListener("click", function () {
   // clear only the items within the new history-list
   historyList.innerHTML = "";
 });
+
+// copy button functionality
+const copyButtons = document.getElementsByClassName("copy-button");
+const copyCountElement = document.getElementById("copy-count");
+
+let copyCount = 0;
+copyCountElement.textContent = copyCount;
+
+for (let i = 0; i < copyButtons.length; i++) {
+  copyButtons[i].addEventListener("click", function () {
+    // hotline number from the data attribute
+    const hotlineNumber = this.getAttribute("data-number");
+
+    // copying the hotline number to the clipboard
+    navigator.clipboard.writeText(hotlineNumber).then(() => {
+      // alert after a successful copy
+      alert(`Copied number: ${hotlineNumber}`);
+
+      // copy count
+      copyCount++;
+      copyCountElement.textContent = copyCount;
+    });
+  });
+}
